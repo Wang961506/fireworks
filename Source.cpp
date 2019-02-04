@@ -147,7 +147,11 @@ struct Firework {
 			this->rgb[i] = 0.0f;
 		}
 
-		generatePoints();
+		//generatePoints();
+		for (int i = 0; i < this->numLines; i++)
+		{
+			branchEnds.push_back(getPoint());
+		}
 	}
 
 	//vertex ctor, initialize location to specified point
@@ -155,12 +159,16 @@ struct Firework {
 	//locations
 	Firework(const Vertex3D inpCenter) {
 		this->center = inpCenter;
-		this->numLines = (rand() % 10) + 75;
+		this->numLines = (rand() % 10) + 100;
 		for (int i = 0; i < 3; i++) {
 			this->rgb[i] = (double)rand() / RAND_MAX;
 		}
 
-		generatePoints();
+		//generatePoints();
+		for (int i = 0; i < this->numLines; i++)
+		{
+			branchEnds.push_back(getPoint());
+		}
 	}
 
 	//copy ctor
@@ -200,10 +208,9 @@ struct Firework {
 		y /= mag; 
 		z /= mag;
 
-		// Math.cbrt is cube root
 		double c = cbrt(u);
 
-		return Vertex3D(x * c * 500, y * c * 500, z * c * 500);
+		return Vertex3D((x * c * 500) + center.x, (y * c * 500) + center.y, (z * c * 500) + center.z);
 	}
 
 
@@ -253,11 +260,11 @@ void display() {
 		glBegin(GL_LINES);
 		for (int j = 0; j < f.branchEnds.size(); j++)
 		{
-			//Vertex3D v = f.branchEnds[j];
+			Vertex3D v = f.branchEnds[j];
 			glVertex3f(center.x, center.y, center.z);
-			//glVertex3f(v.x, v.y, v.z);
-			Vertex3D v = f.getPoint();
-			glVertex3f(v.x + center.x, v.y + center.y, v.z + center.z);
+			glVertex3f(v.x, v.y, v.z);
+			//Vertex3D v = f.getPoint();
+			//glVertex3f(v.x + center.x, v.y + center.y, v.z + center.z);
 		}
 		glEnd();
 	}
